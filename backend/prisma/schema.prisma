@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  userId    String   @unique // Telegram user ID
+  username  String?
+  firstName String?
+  lastName  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  gameResults GameResult[]
+  stats       UserStats?
+
+  @@index([userId])
+}
+
+model GameResult {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score         Int      @default(0)
+  distance      Float    @default(0) // in meters
+  time          Int      @default(0) // in milliseconds
+  blocksAvoided Int      @default(0)
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+  @@index([score])
+  @@index([createdAt])
+}
+
+model UserStats {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  totalGames        Int      @default(0)
+  totalScore        BigInt   @default(0)
+  bestScore         Int      @default(0)
+  bestDistance      Float    @default(0)
+  bestTime          Int      @default(0)
+  totalDistance     Float    @default(0)
+  totalTime         BigInt   @default(0)
+  totalBlocksAvoided Int     @default(0)
+  updatedAt         DateTime @updatedAt
+
+  @@index([bestScore])
+  @@index([userId])
+}
+

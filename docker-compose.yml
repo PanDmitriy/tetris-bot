@@ -1,0 +1,73 @@
+version: '3.8'
+
+# ⚠️ SECURITY WARNING: Default passwords are for LOCAL DEVELOPMENT ONLY!
+# For production, ALWAYS set environment variables in .env file:
+# - POSTGRES_PASSWORD (use a strong, unique password)
+# - BOT_TOKEN (your Telegram bot token)
+# Never commit .env file to git!
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: tetris-bot-db
+    environment:
+      # Default values are for local development only
+      POSTGRES_USER: ${POSTGRES_USER:-tetris}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tetris_password}
+      POSTGRES_DB: ${POSTGRES_DB:-tetris_bot}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-tetris}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - tetris-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: tetris-bot-backend
+    environment:
+      # BOT_TOKEN is REQUIRED - no default value for security
+      BOT_TOKEN: ${BOT_TOKEN}
+      # DATABASE_URL uses defaults for local dev only - set POSTGRES_PASSWORD in production!
+      DATABASE_URL: postgresql://${POSTGRES_USER:-tetris}:${POSTGRES_PASSWORD:-tetris_password}@postgres:5432/${POSTGRES_DB:-tetris_bot}?schema=public
+      WEBAPP_URL: ${WEBAPP_URL:-http://localhost:5173}
+      NODE_ENV: production
+      PORT: 3000
+    ports:
+      - "${BACKEND_PORT:-3000}:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - tetris-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: tetris-bot-frontend
+    ports:
+      - "${FRONTEND_PORT:-5173}:80"
+    depends_on:
+      - backend
+    networks:
+      - tetris-network
+    restart: unless-stopped
+
+networks:
+  tetris-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+
+
+
