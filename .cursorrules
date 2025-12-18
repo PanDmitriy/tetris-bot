@@ -1,0 +1,27 @@
+# Project Rules
+
+## Commit Messages
+- **Always write commit messages in English**
+- Keep commit messages concise and descriptive
+- Use imperative mood (e.g., "Add feature" not "Added feature")
+- Follow conventional commit format when appropriate (feat:, fix:, refactor:, etc.)
+
+## Code Style
+- Follow existing code style and patterns
+- Use TypeScript strict mode
+- Format code with Prettier before committing
+- Follow the project's ESLint rules
+
+## General Guidelines
+- Write clean, maintainable code
+- Add appropriate comments for complex logic
+- Keep functions focused and single-purpose
+- Prefer explicit over implicit code
+- Use meaningful variable and function names
+
+## Project Structure
+- Backend: Telegram bot with Prisma ORM
+- Frontend: React with TypeScript, Tailwind CSS
+- Shared: Shared code between backend and frontend
+- Use workspaces for monorepo structure
+
