@@ -13,8 +13,7 @@ Telegram бот с игрой в гонки в стиле Тетриса. Упр
 ### Frontend
 - **React 18** + **TypeScript**
 - **Vite** - сборщик
-- **Tailwind CSS** - стилизация
-- **Framer Motion** - анимации
+- **Material-UI (MUI)** - UI компоненты и стилизация
 - **Zustand** - управление состоянием
 - **Canvas API** - игровой движок
 

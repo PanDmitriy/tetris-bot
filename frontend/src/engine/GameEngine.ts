@@ -53,15 +53,15 @@ export default class GameEngine {
     if (!ctx) throw new Error('Could not get 2d context');
     this.ctx = ctx;
 
+    // Initialize car position with temporary values
+    this.car = {
+      x: 0,
+      y: 0,
+    };
+
     // Set canvas size
     this.resize();
     window.addEventListener('resize', () => this.resize());
-
-    // Initialize car position
-    this.car = {
-      x: canvas.width / 2 - this.carWidth / 2,
-      y: canvas.height - this.carHeight - 20,
-    };
 
     // Setup input handlers
     this.setupInput();
@@ -83,14 +83,20 @@ export default class GameEngine {
     this.roadWidth = Math.min(300, rect.width * 0.8);
     this.roadX = (rect.width - this.roadWidth) / 2;
 
-    // Adjust car position
+    // Initialize or adjust car position
+    const centerX = rect.width / 2 - this.carWidth / 2;
+    const initialX = this.car.x === 0 && this.car.y === 0 
+      ? centerX 
+      : this.car.x;
+    
     this.car.x = Math.max(
       this.roadX + 10,
       Math.min(
         this.roadX + this.roadWidth - this.carWidth - 10,
-        this.car.x
+        initialX
       )
     );
+    this.car.y = rect.height - this.carHeight - 20;
   }
 
   private setupInput() {

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { Box } from '@mui/material';
 import { useGameStore } from '../store/gameStore';
 import GameEngine from '../engine/GameEngine';
 import GameUI from './GameUI';
@@ -48,15 +49,21 @@ export default function Game() {
   }, [handleGameOver]);
 
   return (
-    <div className="relative w-full h-full bg-gray-900">
+    <Box
+      sx={{
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+        bgcolor: '#111827',
+      }}
+    >
       <canvas
         ref={canvasRef}
-        className="w-full h-full"
-        style={{ display: 'block' }}
+        style={{ display: 'block', width: '100%', height: '100%' }}
       />
       <GameUI />
       {isPaused && <PauseMenu />}
-    </div>
+    </Box>
   );
 }
 

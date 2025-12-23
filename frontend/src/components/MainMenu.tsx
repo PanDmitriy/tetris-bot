@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { Box, Container, Typography, Button, Paper, Grid, Fade, Grow } from '@mui/material';
 import { useGameStore } from '../store/gameStore';
 
 export default function MainMenu() {
@@ -12,82 +12,139 @@ export default function MainMenu() {
   const hasGameResult = score > 0 || distance > 0;
 
   return (
-    <div className="w-full h-full flex items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-center max-w-md w-full"
-      >
-        <motion.h1
-          initial={{ scale: 0.9 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.2, type: 'spring' }}
-          className="text-6xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent"
-        >
-          🚗 Tetris Racing
-        </motion.h1>
+    <Box
+      sx={{
+        width: '100%',
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        p: 2,
+        background: 'linear-gradient(to bottom, #111827, #1f2937, #111827)',
+      }}
+    >
+      <Container maxWidth="sm">
+        <Fade in timeout={500}>
+          <Box sx={{ textAlign: 'center' }}>
+            <Grow in timeout={700}>
+              <Typography
+                variant="h1"
+                sx={{
+                  mb: 2,
+                  fontSize: { xs: '3rem', sm: '4rem' },
+                  fontWeight: 700,
+                  background: 'linear-gradient(45deg, #60a5fa 30%, #a78bfa 90%)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                🚗 Tetris Racing
+              </Typography>
+            </Grow>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="text-gray-300 mb-8 text-lg"
-        >
-          Избегайте падающих блоков и набирайте очки!
-        </motion.p>
+            <Fade in timeout={900}>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: 'text.secondary',
+                  mb: 4,
+                  fontSize: '1.125rem',
+                }}
+              >
+                Избегайте падающих блоков и набирайте очки!
+              </Typography>
+            </Fade>
 
-        {hasGameResult && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="bg-gray-800/50 rounded-lg p-4 mb-6 backdrop-blur-sm"
-          >
-            <h3 className="text-xl font-semibold mb-3">Последний результат:</h3>
-            <div className="grid grid-cols-2 gap-3 text-sm">
-              <div>
-                <div className="text-gray-400">Очки</div>
-                <div className="text-2xl font-bold text-blue-400">{score.toLocaleString()}</div>
-              </div>
-              <div>
-                <div className="text-gray-400">Расстояние</div>
-                <div className="text-2xl font-bold text-green-400">{Math.floor(distance)}m</div>
-              </div>
-              <div>
-                <div className="text-gray-400">Время</div>
-                <div className="text-2xl font-bold text-purple-400">{Math.floor(time / 1000)}s</div>
-              </div>
-              <div>
-                <div className="text-gray-400">Блоков</div>
-                <div className="text-2xl font-bold text-yellow-400">{blocksAvoided}</div>
-              </div>
-            </div>
-          </motion.div>
-        )}
+            {hasGameResult && (
+              <Fade in timeout={1100}>
+                <Paper
+                  elevation={8}
+                  sx={{
+                    p: 3,
+                    mb: 3,
+                    background: 'rgba(31, 41, 55, 0.5)',
+                    backdropFilter: 'blur(10px)',
+                  }}
+                >
+                  <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+                    Последний результат:
+                  </Typography>
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <Typography variant="caption" color="text.secondary">
+                        Очки
+                      </Typography>
+                      <Typography variant="h4" sx={{ color: '#60a5fa', fontWeight: 700 }}>
+                        {score.toLocaleString()}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="caption" color="text.secondary">
+                        Расстояние
+                      </Typography>
+                      <Typography variant="h4" sx={{ color: '#34d399', fontWeight: 700 }}>
+                        {Math.floor(distance)}m
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="caption" color="text.secondary">
+                        Время
+                      </Typography>
+                      <Typography variant="h4" sx={{ color: '#a78bfa', fontWeight: 700 }}>
+                        {Math.floor(time / 1000)}s
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="caption" color="text.secondary">
+                        Блоков
+                      </Typography>
+                      <Typography variant="h4" sx={{ color: '#fbbf24', fontWeight: 700 }}>
+                        {blocksAvoided}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Paper>
+              </Fade>
+            )}
 
-        <motion.button
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.8, type: 'spring' }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handlePlay}
-          className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold py-4 px-8 rounded-xl text-xl shadow-lg hover:shadow-xl transition-shadow"
-        >
-          🎮 Играть
-        </motion.button>
+            <Grow in timeout={1300}>
+              <Button
+                variant="contained"
+                size="large"
+                fullWidth
+                onClick={handlePlay}
+                sx={{
+                  py: 2,
+                  fontSize: '1.25rem',
+                  background: 'linear-gradient(45deg, #3b82f6 30%, #8b5cf6 90%)',
+                  '&:hover': {
+                    background: 'linear-gradient(45deg, #2563eb 30%, #7c3aed 90%)',
+                    transform: 'scale(1.05)',
+                  },
+                  transition: 'transform 0.2s',
+                }}
+              >
+                🎮 Играть
+              </Button>
+            </Grow>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="text-gray-500 text-sm mt-6"
-        >
-          Используйте стрелки для управления
-        </motion.p>
-      </motion.div>
-    </div>
+            <Fade in timeout={1500}>
+              <Typography
+                variant="caption"
+                sx={{
+                  color: 'text.secondary',
+                  mt: 3,
+                  display: 'block',
+                }}
+              >
+                Используйте стрелки для управления
+              </Typography>
+            </Fade>
+          </Box>
+        </Fade>
+      </Container>
+    </Box>
   );
 }
 
